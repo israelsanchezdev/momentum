@@ -12,9 +12,9 @@ from flask import Flask, jsonify
 from flask_cors import CORS # Import CORS
 
 from extensions import db
-from dashboard_models import DashboardCategory, DashboardItem # Ensure models are imported for db.create_all()
-from src.routes.admin_api import admin_bp
-from auth import auth # Import auth for initialization if needed, though it's used in blueprint
+from auth import auth
+from admin_api import admin_bp
+from dashboard_models import DashboardCategory, DashboardItem
 
 def create_app():
     app = Flask(__name__) 
