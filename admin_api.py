@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 from flask import Blueprint, request, jsonify
 from src.extensions import db
-from src.models.dashboard_models import DashboardCategory, DashboardItem
+from dashboard_models import DashboardCategory, DashboardItem
 from src.auth import auth # Import the auth object
 
 admin_bp = Blueprint("admin_api", __name__, url_prefix="/api/admin")
