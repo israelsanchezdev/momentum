@@ -11,10 +11,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from flask import Flask, jsonify
 from flask_cors import CORS # Import CORS
 
-from src.extensions import db
-from src.models.dashboard_models import DashboardCategory, DashboardItem # Ensure models are imported for db.create_all()
+from extensions import db
+from dashboard_models import DashboardCategory, DashboardItem # Ensure models are imported for db.create_all()
 from src.routes.admin_api import admin_bp
-from src.auth import auth # Import auth for initialization if needed, though it's used in blueprint
+from auth import auth # Import auth for initialization if needed, though it's used in blueprint
 
 def create_app():
     app = Flask(__name__) 
