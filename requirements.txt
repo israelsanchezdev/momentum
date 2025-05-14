@@ -4,3 +4,5 @@ flask_sqlalchemy
 flask_httpauth
 gunicorn
 sqlalchemy
+pymysql
+
