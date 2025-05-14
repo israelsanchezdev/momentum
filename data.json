@@ -1,44 +1,31 @@
-[
-  {
-    "title": "Community & Placemaking Initiatives",
-    "items": [
-      { "name": "Topeka-Shawnee County Housing Strategies", "percentage": 33 },
-      { "name": "Housing Advocacy Task Force", "percentage": 20 },
-      { "name": "Downtown and NOTO Master Plan", "percentage": 27 },
-      { "name": "21st Century Riverfront – RAC, GTP", "percentage": 37 },
-      { "name": "Gateways and Corridors", "percentage": 27 },
-      { "name": "Topeka Arts and Culture Master Plan", "percentage": 35 },
-      { "name": "Active Recreation Initiatives", "percentage": 40 }
-    ]
-  },
-  {
-    "title": "Economic Development & Business Growth",
-    "items": [
-      { "name": "Existing Business Services", "percentage": 35 },
-      { "name": "Career Connections Program", "percentage": 27 },
-      { "name": "ASTRA Innovation Center and District", "percentage": 30 },
-      { "name": "Entrepreneurial Ecosystem Building", "percentage": 30 },
-      { "name": "Targeted Corporate Attraction", "percentage": 35 },
-      { "name": "Developer Outreach and Engagement", "percentage": 30 }
-    ]
-  },
-  {
-    "title": "Talent Development & Workforce Support",
-    "items": [
-      { "name": "C2C Collaborative and Data Exchange", "percentage": 12 },
-      { "name": "Washburn Now", "percentage": 55 },
-      { "name": "Career Navigation", "percentage": 27 },
-      { "name": "Child Care Task Force", "percentage": 40 }
-    ]
-  },
-  {
-    "title": "Community Identity & Engagement",
-    "items": [
-      { "name": "Diversity and Inclusion Strategy", "percentage": 34 },
-      { "name": "“My Topeka” Campaign", "percentage": 32 },
-      { "name": "Choose Topeka 2.0", "percentage": 40 },
-      { "name": "Talent Immersion Efforts", "percentage": 35 }
-    ]
-  }
-]
-
+{
+  "Community & Placemaking Initiatives": [
+    { "label": "Topeka-Shawnee County Housing Strategies", "value": 33 },
+    { "label": "Housing Advocacy Task Force", "value": 20 },
+    { "label": "Downtown and NOTO Master Plan", "value": 27 },
+    { "label": "21st Century Riverfront – RAC, GTP", "value": 37 },
+    { "label": "Gateways and Corridors", "value": 27 },
+    { "label": "Topeka Arts and Culture Master Plan", "value": 35 },
+    { "label": "Active Recreation Initiatives", "value": 40 }
+  ],
+  "Economic Development & Business Growth": [
+    { "label": "Existing Business Services", "value": 35 },
+    { "label": "Career Connections Program", "value": 27 },
+    { "label": "ASTRA Innovation Center and District", "value": 30 },
+    { "label": "Entrepreneurial Ecosystem Building", "value": 30 },
+    { "label": "Targeted Corporate Attraction", "value": 35 },
+    { "label": "Developer Outreach and Engagement", "value": 30 }
+  ],
+  "Talent Development & Workforce Support": [
+    { "label": "C2C Collaborative and Data Exchange", "value": 12 },
+    { "label": "Washburn Now", "value": 55 },
+    { "label": "Career Navigation", "value": 27 },
+    { "label": "Child Care Task Force", "value": 40 }
+  ],
+  "Community Identity & Engagement": [
+    { "label": "Diversity and Inclusion Strategy", "value": 34 },
+    { "label": "“My Topeka” Campaign", "value": 32 },
+    { "label": "Choose Topeka 2.0", "value": 40 },
+    { "label": "Talent Immersion Efforts", "value": 35 }
+  ]
+}
