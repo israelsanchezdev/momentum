@@ -1,1 +1,51 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Initiatives Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Interactive Initiatives Dashboard</h1>
+  <p>Visualizing Progress Across Key Areas (Data from JSON)</p>
+
+  <div id="dashboard"></div>
+
+  <script>
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(data => {
+        const grouped = {}
+        data.forEach(item => {
+          if (!grouped[item.category]) grouped[item.category] = []
+          grouped[item.category].push(item)
+        })
+
+        const container = document.getElementById('dashboard')
+        Object.keys(grouped).forEach(category => {
+          const card = document.createElement('div')
+          card.className = 'card'
+          const title = document.createElement('h2')
+          title.textContent = category
+          card.appendChild(title)
+
+          grouped[category].forEach(item => {
+            const label = document.createElement('div')
+            label.className = 'label'
+            label.textContent = `${item.title} — ${item.value}%`
+
+            const bar = document.createElement('div')
+            bar.className = 'bar'
+            bar.innerHTML = `<div class="fill" style="width: ${item.value}%"></div>`
+
+            card.appendChild(label)
+            card.appendChild(bar)
+          })
+
+          container.appendChild(card)
+        })
+      })
+  </script>
+</body>
+</html>
