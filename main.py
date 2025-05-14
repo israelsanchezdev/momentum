@@ -1,27 +1,44 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 import json
 import os
+
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    @app.route('/')
-    def home():
-        return jsonify({"message": "Welcome to the Momentum Dashboard API"})
+    # Config – update this with real database info later
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///local.db")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    @app.route('/data')
-    def dashboard_data():
+    db.init_app(app)
+
+    # Route for homepage
+    @app.route("/")
+    def index():
+        return render_template("index.html")  # looks inside /templates
+
+    # Route to serve the JSON data
+    @app.route("/data")
+    def get_data():
         try:
-            with open('dashboard_data.json') as f:
+            with open("data.json", "r", encoding="utf-8") as f:
                 data = json.load(f)
             return jsonify(data)
-        except FileNotFoundError:
-            return jsonify({"error": "dashboard_data.json not found"}), 404
-        except json.JSONDecodeError:
-            return jsonify({"error": "Error decoding dashboard_data.json"}), 500
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    # Optional: Fallback or simple API route
+    @app.route("/api")
+    def welcome():
+        return jsonify({"message": "Welcome to the Dashboard API"})
 
     return app
 
 app = create_app()
+
+if __name__ == "__main__":
+    app.run(debug=True)
