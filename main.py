@@ -16,14 +16,8 @@ def create_app():
     app = Flask(__name__) 
 
     # --- Configuration ---
-    app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "a_very_secret_key_for_dev")
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        f"mysql+pymysql://{os.getenv('DB_USERNAME', 'root')}:"
-        f"{os.getenv('DB_PASSWORD', 'password')}@"
-        f"{os.getenv('DB_HOST', 'localhost')}:"
-        f"{os.getenv('DB_PORT', '3306')}/"
-        f"{os.getenv('DB_NAME', 'mydb')}"
-    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///dashboard_data.db"
+
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # --- Extensions ---
