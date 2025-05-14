@@ -6,7 +6,7 @@ import os
 # Adjust if your project structure or entry point execution context is different.
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from src.extensions import db # Assuming db is initialized in extensions.py
+from extensions import db # Assuming db is initialized in extensions.py
 
 class DashboardCategory(db.Model):
     __tablename__ = 'dashboard_categories'
