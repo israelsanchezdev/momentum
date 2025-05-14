@@ -1,51 +1,98 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interactive Initiatives Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #0b1120;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #f472b6;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #38bdf8;
+    }
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .category {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 1.5rem;
+      width: 360px;
+    }
+    .initiative {
+      margin-bottom: 1rem;
+    }
+    .initiative span {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+    .bar {
+      background: #334155;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 0.25rem;
+      overflow: hidden;
+    }
+    .fill {
+      background: #a855f7;
+      height: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>Interactive Initiatives Dashboard</h1>
-  <p>Visualizing Progress Across Key Areas (Data from JSON)</p>
-
-  <div id="dashboard"></div>
+  <div class="dashboard" id="dashboard"></div>
 
   <script>
-    fetch('/api/data')
-      .then(res => res.json())
-      .then(data => {
-        const grouped = {}
-        data.forEach(item => {
-          if (!grouped[item.category]) grouped[item.category] = []
-          grouped[item.category].push(item)
-        })
+    async function loadDashboard() {
+      const res = await fetch('/data');
+      const data = await res.json();
+      const container = document.getElementById('dashboard');
 
-        const container = document.getElementById('dashboard')
-        Object.keys(grouped).forEach(category => {
-          const card = document.createElement('div')
-          card.className = 'card'
-          const title = document.createElement('h2')
-          title.textContent = category
-          card.appendChild(title)
+      Object.entries(data).forEach(([category, items]) => {
+        const section = document.createElement('div');
+        section.className = 'category';
+        const heading = document.createElement('h2');
+        heading.textContent = category;
+        section.appendChild(heading);
 
-          grouped[category].forEach(item => {
-            const label = document.createElement('div')
-            label.className = 'label'
-            label.textContent = `${item.title} — ${item.value}%`
+        items.forEach(({ title, percent }) => {
+          const div = document.createElement('div');
+          div.className = 'initiative';
+          div.innerHTML = `
+            <span>
+              <span>${title}</span>
+              <span>${percent}%</span>
+            </span>
+            <div class="bar">
+              <div class="fill" style="width: ${percent}%;"></div>
+            </div>
+          `;
+          section.appendChild(div);
+        });
 
-            const bar = document.createElement('div')
-            bar.className = 'bar'
-            bar.innerHTML = `<div class="fill" style="width: ${item.value}%"></div>`
+        container.appendChild(section);
+      });
+    }
 
-            card.appendChild(label)
-            card.appendChild(bar)
-          })
-
-          container.appendChild(card)
-        })
-      })
+    loadDashboard();
   </script>
 </body>
 </html>
