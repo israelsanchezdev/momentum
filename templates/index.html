@@ -1,98 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interactive Initiatives Dashboard</title>
-  <style>
-    body {
-      background-color: #0b1120;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 2rem;
-    }
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      color: #f472b6;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #38bdf8;
-    }
-    .dashboard {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-    }
-    .category {
-      background: #1e293b;
-      border-radius: 10px;
-      padding: 1.5rem;
-      width: 360px;
-    }
-    .initiative {
-      margin-bottom: 1rem;
-    }
-    .initiative span {
-      display: flex;
-      justify-content: space-between;
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
-    .bar {
-      background: #334155;
-      border-radius: 10px;
-      height: 10px;
-      margin-top: 0.25rem;
-      overflow: hidden;
-    }
-    .fill {
-      background: #a855f7;
-      height: 10px;
-    }
-  </style>
-</head>
 <body>
-  <h1>Interactive Initiatives Dashboard</h1>
-  <div class="dashboard" id="dashboard"></div>
+  <h1 class="title">Interactive Initiatives Dashboard</h1>
+  <p class="subtitle">Visualizing Progress Across Key Areas (Data from JSON)</p>
+
+  <div id="dashboard-container"></div>
 
   <script>
-    async function loadDashboard() {
-      const res = await fetch('/data');
-      const data = await res.json();
-      const container = document.getElementById('dashboard');
+    fetch('/data')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('dashboard-container');
+        container.innerHTML = '';
 
-      Object.entries(data).forEach(([category, items]) => {
-        const section = document.createElement('div');
-        section.className = 'category';
-        const heading = document.createElement('h2');
-        heading.textContent = category;
-        section.appendChild(heading);
+        for (const category in data) {
+          const section = document.createElement('div');
+          section.className = 'category';
 
-        items.forEach(({ title, percent }) => {
-          const div = document.createElement('div');
-          div.className = 'initiative';
-          div.innerHTML = `
-            <span>
-              <span>${title}</span>
-              <span>${percent}%</span>
-            </span>
-            <div class="bar">
-              <div class="fill" style="width: ${percent}%;"></div>
-            </div>
-          `;
-          section.appendChild(div);
-        });
+          const title = document.createElement('h2');
+          title.textContent = category;
+          section.appendChild(title);
 
-        container.appendChild(section);
+          data[category].forEach(item => {
+            const barWrapper = document.createElement('div');
+            barWrapper.className = 'bar-wrapper';
+
+            const label = document.createElement('span');
+            label.textContent = item.label;
+
+            const percent = document.createElement('span');
+            percent.textContent = `${item.value}%`;
+            percent.className = 'percent';
+
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.width = item.value + '%';
+
+            const progress = document.createElement('div');
+            progress.className = 'progress';
+            progress.appendChild(bar);
+
+            const row = document.createElement('div');
+            row.className = 'row';
+            row.appendChild(label);
+            row.appendChild(percent);
+
+            barWrapper.appendChild(row);
+            barWrapper.appendChild(progress);
+
+            section.appendChild(barWrapper);
+          });
+
+          container.appendChild(section);
+        }
       });
+  </script>
+
+  <style>
+    body {
+      background: #0e1629;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
     }
 
-    loadDashboard();
-  </script>
+    .title {
+      font-size: 2.5rem;
+      color: #ff42c0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+
+    .category {
+      background: #1a233a;
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .category h2 {
+      color: #00bfff;
+      margin-bottom: 1rem;
+    }
+
+    .bar-wrapper {
+      margin-bottom: 1rem;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+      font-weight: bold;
+    }
+
+    .progress {
+      background: #2a3550;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .bar {
+      background: #d44bff;
+      height: 100%;
+      border-radius: 10px 0 0 10px;
+    }
+
+    .percent {
+      color: #f06eff;
+    }
+  </style>
 </body>
-</html>
