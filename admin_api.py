@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from flask import Blueprint, request, jsonify
-from src.extensions import db
+from extensions import db
 from dashboard_models import DashboardCategory, DashboardItem
 from src.auth import auth # Import the auth object
 
