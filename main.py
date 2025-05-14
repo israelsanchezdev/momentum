@@ -1,10 +1,10 @@
 import sys
 import os
 
-# Ensure the project root is in Python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+# Ensure the current directory is in the path for absolute imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 from extensions import db
@@ -13,9 +13,9 @@ from admin_api import admin_bp
 from dashboard_models import DashboardCategory, DashboardItem
 
 def create_app():
-    app = Flask(__name__, template_folder='templates', static_folder='static')
+    app = Flask(__name__)
 
-    # --- Configuration ---
+    # Configuration
     app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "a_very_secret_key_for_dev")
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://{os.getenv('DB_USERNAME', 'root')}:"
@@ -26,15 +26,14 @@ def create_app():
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # --- Extensions ---
+    # Initialize extensions
     db.init_app(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # --- Blueprints ---
+    # Register blueprints
     app.register_blueprint(admin_bp)
-    app.register_blueprint(auth)
 
-    # --- Database Initialization ---
+    # Create tables if necessary
     with app.app_context():
         try:
             if not db.engine.dialect.has_table(db.engine.connect(), DashboardCategory.__tablename__):
@@ -43,34 +42,21 @@ def create_app():
             else:
                 print("Database tables already exist.")
         except Exception as e:
-            print(f"Error during database check/creation: {e}")
-            print("Attempting to create tables anyway...")
+            print(f"Error checking/creating tables: {e}")
             try:
                 db.create_all()
-                print("Database tables created after error.")
-            except Exception as e_inner:
-                print(f"Failed to create tables: {e_inner}")
+            except Exception as e2:
+                print(f"Final table creation failed: {e2}")
 
-    # --- Routes ---
     @app.route("/")
     def index():
-        return render_template("index.html")
-
-    @app.route("/api/data")
-    def get_data():
-        # This should eventually query your real DB
-        dummy_data = [
-            {"category": "Community & Placemaking Initiatives", "title": "Topeka-Shawnee County Housing Strategies", "value": 33},
-            {"category": "Community & Placemaking Initiatives", "title": "Housing Advocacy Task Force", "value": 20},
-            {"category": "Economic Development & Business Growth", "title": "Career Connections Program", "value": 27},
-            {"category": "Talent Development & Workforce Support", "title": "Washburn Now", "value": 55},
-            {"category": "Community Identity & Engagement", "title": "Choose Topeka 2.0", "value": 40}
-        ]
-        return jsonify(dummy_data)
+        return jsonify({"message": "Welcome to the Dashboard API"})
 
     return app
 
-# Required only for local development
+# 🟢 Required for gunicorn (Render reads this line)
+app = create_app()
+
+# Optional for local dev
 if __name__ == "__main__":
-    app = create_app()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5001)), debug=True)
